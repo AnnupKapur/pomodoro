@@ -4,6 +4,11 @@ export const OBJ_PAGES = {
 	COUNTDOWN: 'COUNTDOWN',
 };
 
+export const TIMER_STATE = {
+	RUNNING: 'Running',
+	PAUSED: 'Paused',
+}
+
 export const TIMER_MODE = {
 	WORK: 'Work',
 	BREAK: 'Break',

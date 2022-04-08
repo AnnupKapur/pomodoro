@@ -3,56 +3,50 @@ import { useState, useEffect } from 'react';
 import { 
   //OBJ_PAGES, 
   BUTTON_DELAY, 
-  TIMER_MODE } from './Constants';
+  TIMER_MODE,
+  TIMER_STATE,
+} from './Constants';
 
 import Timer from './Timer/Timer.tsx';
 
 function App() {
   //const [strPageView, setStrPageView] = useState(OBJ_PAGES.SET_WORK)
-  const [intStartTime, setintStartTime] = useState(1500);
-	const [intCurrentTimer, setintCurrentTimer] = useState(1500);
-  const [bTimerRunning, setbTimerRunning] = useState(false);
+  const [strTimerState, setstrTimerState] = useState(TIMER_STATE.PAUSED)
+  const [intCurrentTime, setintCurrentTime] = useState(1500);
 
   useEffect(()=>{
-    if(bTimerRunning){
-      setTimeout(()=>{
-        setintCurrentTimer(intCurrentTimer-1)
+    let intervalTimer = null;
+    if(strTimerState === TIMER_STATE.RUNNING){
+      intervalTimer = setInterval(()=>{
+        setintCurrentTime(intCurrentTime-1);
       }, 1000)
+    } else if(strTimerState === TIMER_STATE.PAUSED && intCurrentTime > 0){
+      clearInterval(intervalTimer);
     }
-  },[bTimerRunning, intCurrentTimer])
-
-  useEffect(()=>{
-    setintStartTime(1500);
-  },[])
+    return () => clearInterval(intervalTimer);
+  }, [strTimerState, intCurrentTime])
 
   const funcStartTimer = () => {
-    setTimeout(()=>{
-      setbTimerRunning(true);
-    }, BUTTON_DELAY)
+    setstrTimerState(TIMER_STATE.RUNNING);
   }
 
   const funcPauseTimer = () => {
-    setbTimerRunning(false);
-    setintCurrentTimer(intCurrentTimer);
+    setstrTimerState(TIMER_STATE.PAUSED);
   }
 
   const funcResetTimer = () => {
-    const bWasRunning = bTimerRunning;
-    setbTimerRunning(false);
-    setTimeout(()=>{
-      setintCurrentTimer(intStartTime)
-      setbTimerRunning(bWasRunning);
-    }, BUTTON_DELAY)
-  };
+    setstrTimerState(TIMER_STATE.PAUSED);
+    setintCurrentTime(1500);
+  }
 
   return (
     <div className="App">
       <Timer
         strTimerMode={TIMER_MODE.WORK}
         strModeSelect='dark'
-        intCurrentTimer={intCurrentTimer}
-        intStartTime={intStartTime}
-        bTimerRunning={bTimerRunning}
+        intCurrentTimer={intCurrentTime}
+        intStartTime={1500}
+        strTimerState={strTimerState}
         funcStartTimer={funcStartTimer}
         funcPauseTimer={funcPauseTimer}
         funcResetTimer={funcResetTimer}

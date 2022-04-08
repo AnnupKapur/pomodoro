@@ -5,13 +5,14 @@ import {
 	ActionIcon,
 	Text,
 } from '@mantine/core';
+import { TIMER_STATE } from '../Constants';
 
 type Props = {
 	strTimerMode: string;
 	intCurrentTimer: number;
 	strModeSelect: string;
 	intStartTime: number;
-	bTimerRunning: boolean;
+	strTimerState: string;
 	funcStartTimer: () => void;
 	funcPauseTimer: () => void;
 	funcResetTimer: () => void;
@@ -22,7 +23,7 @@ const Timer = ({
 	intCurrentTimer = 1500,
 	strModeSelect = "light",
 	intStartTime,
-	bTimerRunning,
+	strTimerState,
 	funcStartTimer,
 	funcPauseTimer,
 	funcResetTimer,
@@ -54,13 +55,13 @@ const Timer = ({
 					</ActionIcon>
 			)}
 
-				{(bTimerRunning) && (
+				{(strTimerState === TIMER_STATE.RUNNING) && (
 					<ActionIcon size="xl" radius="xl" onClick={()=>{funcPauseTimer()}}>
 						<BiPause size={30} />
 					</ActionIcon>
 				)}
 
-				{(!bTimerRunning) && (
+				{(strTimerState === TIMER_STATE.PAUSED) && (
 					<ActionIcon size="xl" radius="xl" onClick={()=>{funcStartTimer()}}>
 						<BiPlay size={30} />
 					</ActionIcon>
