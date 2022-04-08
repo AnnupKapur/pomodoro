@@ -21,6 +21,10 @@ function App() {
     }
   },[bTimerRunning, intCurrentTimer])
 
+  useEffect(()=>{
+    setintStartTime(1500);
+  },[])
+
   const funcStartTimer = () => {
     setTimeout(()=>{
       setbTimerRunning(true);
