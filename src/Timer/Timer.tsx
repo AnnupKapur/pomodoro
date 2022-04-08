@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import './TimerStyle.css'
 import { BiReset, BiPause, BiPlay } from 'react-icons/bi';
 import { 
-	Tooltip,
 	ActionIcon,
 	Text,
 } from '@mantine/core';

@@ -1,18 +1,21 @@
 import './App.css';
 import { useState, useEffect } from 'react';
-import { OBJ_PAGES, BUTTON_DELAY, TIMER_MODE } from './Constants';
+import { 
+  //OBJ_PAGES, 
+  BUTTON_DELAY, 
+  TIMER_MODE } from './Constants';
 
 import Timer from './Timer/Timer.tsx';
 
 function App() {
-  const [strPageView, setStrPageView] = useState(OBJ_PAGES.SET_WORK)
+  //const [strPageView, setStrPageView] = useState(OBJ_PAGES.SET_WORK)
   const [intStartTime, setintStartTime] = useState(1500);
 	const [intCurrentTimer, setintCurrentTimer] = useState(1500);
   const [bTimerRunning, setbTimerRunning] = useState(false);
 
   useEffect(()=>{
     if(bTimerRunning){
-      const timer = setTimeout(()=>{
+      setTimeout(()=>{
         setintCurrentTimer(intCurrentTimer-1)
       }, 1000)
     }
@@ -46,7 +49,6 @@ function App() {
         intCurrentTimer={intCurrentTimer}
         intStartTime={intStartTime}
         bTimerRunning={bTimerRunning}
-        setintCurrentTimer={setintCurrentTimer}
         funcStartTimer={funcStartTimer}
         funcPauseTimer={funcPauseTimer}
         funcResetTimer={funcResetTimer}
