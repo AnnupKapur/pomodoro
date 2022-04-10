@@ -1,11 +1,13 @@
 import React from 'react'
 import './TimerStyle.css'
 import { BiReset, BiPause, BiPlay } from 'react-icons/bi';
+import { FaHome } from 'react-icons/fa';
 import { 
 	ActionIcon,
 	Text,
+	Button,
 } from '@mantine/core';
-import { TIMER_STATE } from '../Constants';
+import { TIMER_STATE, PAGE_COLORS } from '../Constants';
 
 type Props = {
 	strTimerMode: string;
@@ -16,6 +18,7 @@ type Props = {
 	funcStartTimer: () => void;
 	funcPauseTimer: () => void;
 	funcResetTimer: () => void;
+	funcReturnHome: () => void;
 }
 
 const Timer = ({
@@ -27,18 +30,29 @@ const Timer = ({
 	funcStartTimer,
 	funcPauseTimer,
 	funcResetTimer,
+	funcReturnHome,
 }: Props):JSX.Element => {
 
   return (
 	  <div id='timer' className={`countdown countdown__${strModeSelect}`}>
 		  <div className="fillTimer"></div>
 
+			<Button 
+				leftIcon={<FaHome size={30} />} 
+				variant="subtle"
+				gradient={PAGE_COLORS.COUNTDOWN}
+				className='btn__home'
+				size='xl'
+				>
+				<div className='btn__label'>Home</div>
+			</Button>
+
 			<div className="title">
 				<Text
 					component="div"
-      		align="center"
+      			align="center"
 					variant="gradient"
-					gradient={{ from: 'indigo', to: 'cyan', deg: 45 }}
+					gradient={PAGE_COLORS.COUNTDOWN}
 					size="xl"
 					style={{ fontFamily: 'Greycliff CF, sans-serif' }}
 				>

@@ -1,8 +1,7 @@
 import './App.css';
 import { useState, useEffect } from 'react';
 import { 
-  //OBJ_PAGES, 
-  BUTTON_DELAY, 
+  OBJ_PAGES, 
   TIMER_MODE,
   TIMER_STATE,
 } from './Constants';
@@ -10,9 +9,17 @@ import {
 import Timer from './Timer/Timer.tsx';
 
 function App() {
-  //const [strPageView, setStrPageView] = useState(OBJ_PAGES.SET_WORK)
+  const [strPageView, setstrPageView] = useState(OBJ_PAGES.SET_WORK)
   const [strTimerState, setstrTimerState] = useState(TIMER_STATE.PAUSED)
-  const [intCurrentTime, setintCurrentTime] = useState(1500);
+  const [intCurrentTime, setintCurrentTime] = useState(0);
+  const [intWorkTime, setintWorkTime] = useState(0);
+  const [intBreakTime, setintBreakTime] = useState(0);
+
+  useEffect(()=>{
+    setintWorkTime(1500);
+    setintBreakTime(300);
+    setintCurrentTime(1500);
+  },[])
 
   useEffect(()=>{
     let intervalTimer = null;
@@ -36,7 +43,37 @@ function App() {
 
   const funcResetTimer = () => {
     setstrTimerState(TIMER_STATE.PAUSED);
-    setintCurrentTime(1500);
+    setintCurrentTime(intWorkTime);
+  }
+
+  const funcReturnHome = () => {
+    setstrPageView(OBJ_PAGES.SET_WORK);
+  }
+
+  const funcNextPage = () => {
+    switch(strPageView){
+      case OBJ_PAGES.SET_WORK:
+        setstrPageView(OBJ_PAGES.SET_BREAK);
+        break;
+      case OBJ_PAGES.SET_BREAK:
+        setstrPageView(OBJ_PAGES.COUNTDOWN);
+        break;
+      default:
+        setstrPageView(OBJ_PAGES.SET_WORK);
+    }
+  }
+
+  const funcPreviousPage = () => {
+    switch(strPageView){
+      case OBJ_PAGES.SET_BREAK:
+        setstrPageView(OBJ_PAGES.SET_WORK);
+        break;
+      case OBJ_PAGES.COUNTDOWN:
+        setstrPageView(OBJ_PAGES.SET_BREAK);
+        break;
+      default:
+        setstrPageView(OBJ_PAGES.SET_WORK);
+    }
   }
 
   return (
@@ -47,6 +84,7 @@ function App() {
         intCurrentTimer={intCurrentTime}
         intStartTime={1500}
         strTimerState={strTimerState}
+        funcReturnHome={funcReturnHome}
         funcStartTimer={funcStartTimer}
         funcPauseTimer={funcPauseTimer}
         funcResetTimer={funcResetTimer}

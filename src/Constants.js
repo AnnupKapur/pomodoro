@@ -14,4 +14,8 @@ export const TIMER_MODE = {
 	BREAK: 'Break',
 }
 
-export const BUTTON_DELAY = 500;
+export const PAGE_COLORS = {
+	COUNTDOWN: { from: 'indigo', to: 'cyan', deg: 45 },
+};
+
+export const BUTTON_HOVER_TIME = '500ms';
