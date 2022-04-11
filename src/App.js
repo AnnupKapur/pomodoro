@@ -7,19 +7,14 @@ import {
 } from './Constants';
 
 import Timer from './Timer/Timer.tsx';
+import SetWork from './SetWork/SetWork.tsx';
 
 function App() {
-  const [strPageView, setstrPageView] = useState(OBJ_PAGES.SET_WORK)
+  const [strPageView, setstrPageView] = useState(OBJ_PAGES.COUNTDOWN)
   const [strTimerState, setstrTimerState] = useState(TIMER_STATE.PAUSED)
-  const [intCurrentTime, setintCurrentTime] = useState(0);
-  const [intWorkTime, setintWorkTime] = useState(0);
-  const [intBreakTime, setintBreakTime] = useState(0);
-
-  useEffect(()=>{
-    setintWorkTime(1500);
-    setintBreakTime(300);
-    setintCurrentTime(1500);
-  },[])
+  const [intCurrentTime, setintCurrentTime] = useState(1500);
+  const [intWorkTime, setintWorkTime] = useState(1500);
+  const [intBreakTime, setintBreakTime] = useState(300);
 
   useEffect(()=>{
     let intervalTimer = null;
@@ -50,6 +45,14 @@ function App() {
     setstrPageView(OBJ_PAGES.SET_WORK);
   }
 
+  const funcSetWorkTime = (intSeconds) => {
+    setintWorkTime(intSeconds);
+  }
+
+  const funcSetBreakTime = (intSeconds) => {
+    setintBreakTime(intSeconds);
+  }
+
   const funcNextPage = () => {
     switch(strPageView){
       case OBJ_PAGES.SET_WORK:
@@ -78,6 +81,19 @@ function App() {
 
   return (
     <div className="App">
+
+    {(strPageView === OBJ_PAGES.SET_WORK) && (
+      <SetWork 
+        intWorkTime={intWorkTime}
+        funcSetWorkTime={funcSetWorkTime}
+      />
+    )}
+
+    {(strPageView === OBJ_PAGES.SET_REST) && (
+      <div>SET REST COMPONENET HERE</div>
+    )}
+
+    {(strPageView === OBJ_PAGES.COUNTDOWN) && (
       <Timer
         strTimerMode={TIMER_MODE.WORK}
         strModeSelect='dark'
@@ -89,6 +105,7 @@ function App() {
         funcPauseTimer={funcPauseTimer}
         funcResetTimer={funcResetTimer}
       />
+    )}
     </div>
   );
 }

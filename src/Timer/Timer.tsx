@@ -1,5 +1,5 @@
 import React from 'react'
-import './TimerStyle.css'
+import './Timer.style.css'
 import { BiReset, BiPause, BiPlay } from 'react-icons/bi';
 import { FaHome } from 'react-icons/fa';
 import { 
@@ -33,9 +33,9 @@ const Timer = ({
 	funcReturnHome,
 }: Props):JSX.Element => {
 
-  return (
-	  <div id='timer' className={`countdown countdown__${strModeSelect}`}>
-		  <div className="fillTimer"></div>
+	return (
+		<div id='timer' className={`countdown countdown__${strModeSelect}`}>
+			<div className="fillTimer"></div>
 
 			<Button 
 				leftIcon={<FaHome size={30} />} 
@@ -43,6 +43,7 @@ const Timer = ({
 				gradient={PAGE_COLORS.COUNTDOWN}
 				className='btn__home'
 				size='xl'
+				onClick={funcReturnHome}
 				>
 				<div className='btn__label'>Home</div>
 			</Button>
@@ -50,7 +51,7 @@ const Timer = ({
 			<div className="title">
 				<Text
 					component="div"
-      			align="center"
+					align="center"
 					variant="gradient"
 					gradient={PAGE_COLORS.COUNTDOWN}
 					size="xl"
@@ -60,7 +61,7 @@ const Timer = ({
 				</Text>
 			</div>
 
-		  {`${("0" + Math.floor(intCurrentTimer/60)).slice(-2)}:${("0" + intCurrentTimer%60).slice(-2)}`}
+			{`${("0" + Math.floor(intCurrentTimer/60)).slice(-2)}:${("0" + intCurrentTimer%60).slice(-2)}`}
 
 			<div className="controls">
 			{(intStartTime!==intCurrentTimer) && (
@@ -82,8 +83,8 @@ const Timer = ({
 				)}
 			</div>
 
-	  </div>
-  )
+		</div>
+	)
 }
 
 export default Timer
