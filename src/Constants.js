@@ -19,3 +19,5 @@ export const PAGE_COLORS = {
 };
 
 export const BUTTON_HOVER_TIME = '500ms';
+
+export const MINUTE_NUMBERS = [0,1,2,3,4,5];

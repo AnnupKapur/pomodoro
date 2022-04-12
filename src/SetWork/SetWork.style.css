@@ -41,3 +41,12 @@
 .input__error{
 	color:red;
 }
+
+.slider{
+	padding-top:30px;
+	width: 70vw;
+}
+
+.mantine-Slider-track::before{
+	background-color: rgb(0, 0, 0);
+}
