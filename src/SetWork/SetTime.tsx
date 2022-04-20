@@ -1,43 +1,44 @@
 import React, { useEffect, useState } from 'react';
-import './SetWork.style.css';
-// import { MdDone } from 'react-icons/md';
+import './SetTime.style.css';
+import { MdDone } from 'react-icons/md';
 // import { BiReset } from 'react-icons/bi';
 import {
 	Text,
    Slider,
+	ActionIcon,
 } from '@mantine/core';
 import { PAGE_COLORS } from '../Constants';
 
 type Props = {
-   intWorkTime: number;
-   funcSetWorkTime: (intSeconds:number)=>void;
+   strPageName: string;
+   intTime: number;
+   funcSetTime: (intSeconds:number)=>void;
 }
 
-const SetWork = ({
-   intWorkTime,
-   funcSetWorkTime,
+const SetTime = ({
+   strPageName,
+   intTime,
+   funcSetTime,
 }: Props) => {
    
-   const [intWorkMins, setintWorkMins] = useState(0);
-   const [intWorkSeconds, setintWorkSeconds] = useState(0);
+   const [intMins, setintMins] = useState(0);
+   const [intSeconds, setintSeconds] = useState(0);
    const [strInput, setstrInput] = useState('');
 
    useEffect(()=>{
-      const intMins = Math.floor(intWorkTime/60);
-      const intSeconds = intWorkTime%60;
+      const intMins = Math.floor(intTime/60);
+      const intSeconds = intTime%60;
       
-      setintWorkMins(intMins);
-      setintWorkSeconds(intSeconds);
-      setstrInput(`${intMins}:${intSeconds.toString().padStart(2, '0')}`);
-   },[intWorkTime])
+      setintMins(intMins);
+      setintSeconds(intSeconds);
+      setstrInput(`${intMins.toString().padStart(2, '0')}:${intSeconds.toString().padStart(2, '0')}`);
+   },[intTime])
 
    useEffect(()=>{
-      console.log(intWorkSeconds)
-   }, [intWorkSeconds])
+   }, [intSeconds])
 
    useEffect(()=>{
-      console.log(intWorkMins)
-   }, [intWorkMins])
+   }, [intMins])
 
    useEffect(()=>{
       (strInput.length === 2) && setstrInput(`${strInput}:`)
@@ -60,40 +61,37 @@ const SetWork = ({
          if(strInput.split(':').length===2 && strInput[strInput.length-1] !== ':'){
             if(strInput.split(':')[1].length===2){
                const intNewSeconds = parseInt(strInput.slice(0,-1).slice(-1));
-               console.log(`new seconds: ${intNewSeconds}`);
-               setintWorkSeconds(intNewSeconds*10);
+               setintSeconds(intNewSeconds*10);
             } else{
-               setintWorkSeconds(0);
+               setintSeconds(0);
                //setstrInput(strInput.slice(0,-1));
             }
          } else if(
             (strInput.split(':').length===2 && strInput[strInput.length-1] === ':') 
                || strInput.split(':').length===1){
             if(strInput.split(':')[0].length===2){
-               console.log(`strinput: ${strInput}`);
                const intNewMins = parseInt(strInput.slice(0,-2));
-               console.log(`new mins: ${intNewMins}`);
-               setintWorkMins(intNewMins);
+               setintMins(intNewMins);
             } else{
-               setintWorkMins(0);
+               setintMins(0);
             }
          }
 
       } else if(!isNaN(parseInt(event.key))){
          if(strInput.split(':').length===2){
             if((strInput.split(':')[1].length === 0) && (parseInt(event.key)<6)){
-               setintWorkSeconds(parseInt(event.key)*10);
+               setintSeconds(parseInt(event.key)*10);
                setstrInput(`${strInput}${event.key}`);
             } else if(strInput.split(':')[1].length === 1){
-               setintWorkSeconds(intWorkSeconds + parseInt(event.key));
+               setintSeconds(intSeconds + parseInt(event.key));
                setstrInput(`${strInput}${event.key}`);
             }
          } else {
             if((strInput.split(':')[0].length === 0)){
-               setintWorkMins(parseInt(event.key));
+               setintMins(parseInt(event.key));
                setstrInput(`${strInput}${event.key}`);
             } else if(strInput.split(':')[0].length === 1){
-               setintWorkMins((intWorkMins*10) + parseInt(event.key));
+               setintMins((intMins*10) + parseInt(event.key));
                setstrInput(`${strInput}${event.key}`);
             }
          }
@@ -104,8 +102,8 @@ const SetWork = ({
       const intNewMins = Math.floor(intSlider/60);
       const intNewSeconds = intSlider%60;
 
-      setintWorkMins(intNewMins);
-      setintWorkSeconds(intNewSeconds);
+      setintMins(intNewMins);
+      setintSeconds(intNewSeconds);
       setstrInput(`${intNewMins.toString().padStart(2, '0')}:${intNewSeconds.toString().padStart(2, '0')}`)
    }
 
@@ -120,10 +118,10 @@ const SetWork = ({
 					size="xl"
 					style={{ fontFamily: 'Greycliff CF, sans-serif' }}
 				>
-					Set Work Time
+					{`Set ${strPageName} Time`}
 				</Text></div>
          <div
-            className="inputWork"
+            className="input"
             onChange={(event) => funcSetNewTime(event)}
          >
             {strInput}
@@ -132,7 +130,7 @@ const SetWork = ({
          <Slider
             color="indigo"
             label={null}
-            value={(intWorkMins*60)+(intWorkSeconds)}
+            value={(intMins*60)+(intSeconds)}
             min={0}
             step={15}
             max={3600}
@@ -151,9 +149,13 @@ const SetWork = ({
          />
          </div>
 
-         <div className="next"></div>
+         <div className="next">
+					<ActionIcon size="xl" radius="xl" onClick={()=>{funcSetTime(intMins*60 + intSeconds)}}>
+						<MdDone size={30} />
+					</ActionIcon>
+         </div>
       </div>
    )
 }
 
-export default SetWork
+export default SetTime
