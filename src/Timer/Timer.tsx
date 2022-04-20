@@ -34,7 +34,7 @@ const Timer = ({
 }: Props):JSX.Element => {
 
 	return (
-		<div id='timer' className={`countdown countdown__${strModeSelect}`}>
+		<div id='timer' className={`countdown countdown__${strTimerMode}`}>
 			<div className="fillTimer"></div>
 
 			<Button 

@@ -99,6 +99,7 @@ function App() {
   const funcSetBreakTime = (intSeconds) => {
     setintBreakTime(intSeconds);
     setintCurrentTime(intWorkTime);
+    setstrTimerMode(TIMER_MODE.WORK)
     funcNextPage();
   }
 
