@@ -4,6 +4,7 @@ import {
   OBJ_PAGES, 
   TIMER_MODE,
   TIMER_STATE,
+  LOCAL_STORAGE,
 } from './Constants';
 
 import Timer from './Timer/Timer.tsx';
@@ -28,6 +29,44 @@ function App() {
     }
     return () => clearInterval(intervalTimer);
   }, [strTimerState, intCurrentTime])
+
+
+  // LOCAL STORAGE CRUD
+
+  /**
+   * Check if local straoge exists, if not, create it, then return the value
+   * @returns {boolean} - should only return true
+   */
+     const funcLocalStorageCreate = () => {
+      if(!localStorage.getItem(LOCAL_STORAGE.KEY)){
+        localStorage.setItem(LOCAL_STORAGE.KEY, '');
+        return true;
+      }
+    }
+
+  /**
+   * Check if local straoge exists, if not, create it, then return the value
+   * @returns {boolean} - should only return true
+   */
+  const funcLocalStorageRead = () => {
+    if(localStorage.getItem(LOCAL_STORAGE.KEY)){
+      return localStorage.getItem(LOCAL_STORAGE.KEY);
+    } else {
+      funcLocalStorageCreate();
+      funcLocalStorageRead();
+    }
+  }
+
+  /**
+   * UPDATE THE LOCALSTORAGE WITH NEW DATA
+   * @param {intTimeToAdd} - interger time to add to localstorage in seconds
+   * @param {strTImeModeToAdd} - which mode of time needs adding
+   * @returns {undefined} - nothing to return
+   */
+  // const funcLocalStorageUpdate = (intTimeToAdd, strTimeModeToAdd) => {
+
+  // }
+
 
   useEffect(()=>{
     if(intCurrentTime===0){

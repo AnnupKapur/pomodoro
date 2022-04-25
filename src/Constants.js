@@ -2,6 +2,7 @@ export const OBJ_PAGES = {
 	SET_WORK: 'SET_WORK',
 	SET_BREAK: 'SET_REST',
 	COUNTDOWN: 'COUNTDOWN',
+	STATS: 'STATS',
 };
 
 export const TIMER_STATE = {
@@ -21,3 +22,7 @@ export const PAGE_COLORS = {
 export const BUTTON_HOVER_TIME = '500ms';
 
 export const MINUTE_NUMBERS = [0,1,2,3,4,5];
+
+export const LOCAL_STORAGE = {
+	KEY: 'POMODORO_STATS',
+};
