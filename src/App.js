@@ -18,6 +18,8 @@ function App() {
   const [intBreakTime, setintBreakTime] = useState(300);
   const [strTimerMode, setstrTimerMode] = useState(TIMER_MODE.WORK);
 
+  const [strTestData, setstrTestData] = useState('W600/B300/W660/B360/W720/B420/W780/B480/W840/B540/W900/B600');
+
   useEffect(()=>{
     let intervalTimer = null;
     if(strTimerState === TIMER_STATE.RUNNING){
@@ -47,15 +49,41 @@ function App() {
   /**
    * Check if local straoge exists, if not, create it, then return the value
    * @returns {boolean} - should only return true
+   * DATA FORM : W20/B5/W21/W11
    */
   const funcLocalStorageRead = () => {
-    if(localStorage.getItem(LOCAL_STORAGE.KEY)){
-      return localStorage.getItem(LOCAL_STORAGE.KEY);
+    if(!localStorage.getItem(LOCAL_STORAGE.KEY)){
+      
+      //ARKNOTE: REMEMBER TO SWAP TEST DATA FOR REAL DATA
+  
+      //const strData = localStorage.getItem(LOCAL_STORAGE.KEY);    
+      const arrData = strTestData.split('/');
+
+      const arrWorkData = [];
+      const arrBreakData = [];
+
+      arrData.forEach(strDataElement=>{
+        if(strDataElement[0]==='W'){arrWorkData.push(strDataElement.slice(1))}
+        else if(strDataElement[0]==='B'){arrBreakData.push(strDataElement.slice(1))}
+      })
+
+      const objData = {
+        work: arrWorkData,
+        break: arrBreakData,
+      }
+
+      return objData;
+
     } else {
-      funcLocalStorageCreate();
-      funcLocalStorageRead();
+      if(funcLocalStorageCreate()){
+        funcLocalStorageRead();
+      }
     }
   }
+
+  useEffect(()=>{
+    console.log(funcLocalStorageRead());
+  },[]);
 
   /**
    * UPDATE THE LOCALSTORAGE WITH NEW DATA
