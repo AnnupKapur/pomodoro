@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 export const OBJ_PAGES = {
 	SET_WORK: 'SET_WORK',
 	SET_BREAK: 'SET_REST',
@@ -11,9 +13,16 @@ export const TIMER_STATE = {
 }
 
 export const TIMER_MODE = {
-	WORK: 'Work',
-	BREAK: 'Break',
+	WORK: {
+		NAME: 'Work',
+		DATA_KEY: 'W',
+	},
+	BREAK: {
+		NAME: 'Break',
+		DATA_KEY: 'B',
+	},
 }
+
 
 export const PAGE_COLORS = {
 	COUNTDOWN: { from: 'indigo', to: 'cyan', deg: 45 },
@@ -25,4 +34,7 @@ export const MINUTE_NUMBERS = [0,1,2,3,4,5];
 
 export const LOCAL_STORAGE = {
 	KEY: 'POMODORO_STATS',
+	SPLIT_CHAR: '/',
 };
+
+export const THROW_ERROR = 'error';

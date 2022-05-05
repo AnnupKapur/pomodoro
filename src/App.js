@@ -5,6 +5,7 @@ import {
   TIMER_MODE,
   TIMER_STATE,
   LOCAL_STORAGE,
+  THROW_ERROR,
 } from './Constants';
 
 import Timer from './Timer/Timer.tsx';
@@ -16,7 +17,7 @@ function App() {
   const [intCurrentTime, setintCurrentTime] = useState(1500);
   const [intWorkTime, setintWorkTime] = useState(1500);
   const [intBreakTime, setintBreakTime] = useState(300);
-  const [strTimerMode, setstrTimerMode] = useState(TIMER_MODE.WORK);
+  const [strTimerMode, setstrTimerMode] = useState(TIMER_MODE.WORK.NAME);
 
   const [strTestData, setstrTestData] = useState('W600/B300/W660/B360/W720/B420/W780/B480/W840/B540/W900/B600');
 
@@ -36,77 +37,98 @@ function App() {
   // LOCAL STORAGE CRUD
 
   /**
-   * Check if local straoge exists, if not, create it, then return the value
-   * @returns {boolean} - should only return true
+   * UPDATE THE LOCALSTORAGE WITH NEW DATA
+   * @param {number} intTimeToAdd - interger time to add to localstorage in seconds
+   * @param {string} strTimerMode - which mode of time needs adding
+   * @returns {boolean} - if item added or not
    */
-     const funcLocalStorageCreate = () => {
-      if(!localStorage.getItem(LOCAL_STORAGE.KEY)){
-        localStorage.setItem(LOCAL_STORAGE.KEY, '');
+  const funcLocalStorageUpdate_add = (intTimeToAdd, strTimerMode) => {
+    if(!localStorage.getItem(LOCAL_STORAGE.KEY)){
+      // ARKNOTE: REMEMBER TO REMOVE ! FROM LOCALSTORE EXITANCE CHECK ON FINAL
+
+      let strTimerModeToSet = '';
+
+      if(strTimerMode === TIMER_MODE.WORK.NAME){
+        strTimerModeToSet = TIMER_MODE.WORK.DATA_KEY;
+      }else if(strTimerMode === TIMER_MODE.BREAK.NAME){
+        strTimerModeToSet = TIMER_MODE.BREAK.DATA_KEY;
+      } else {
+        return THROW_ERROR;
+      }
+
+      //ARKNOTE: REMEMBER TO SWAP TEST DATA FOR REAL DATA - switch the next comment over
+      //const strData = localStorage.getItem(LOCAL_STORAGE.KEY);    
+      const strData = `${strTestData}/${strTimerModeToSet}${intTimeToAdd}`;
+      //localStorage.setItem(LOCAL_STORAGE.KEY, strData);
+      //const arrDataCheck = localStorage.getItem(LOCAL_STORAGE.KEY).split(LOCAL_STORAGE.SPLIT_CHAR);
+
+      const arrDataCheck = strData.split(LOCAL_STORAGE.SPLIT_CHAR);
+      const strDataItemCheck = arrDataCheck[arrDataCheck.length-1];
+
+      if(strDataItemCheck[0]===strTimerModeToSet && parseInt(strDataItemCheck.slice(1))===intTimeToAdd){
         return true;
       }
-    }
-
-  /**
-   * Check if local straoge exists, if not, create it, then return the value
-   * @returns {boolean} - should only return true
-   * DATA FORM : W20/B5/W21/W11
-   */
-  const funcLocalStorageRead = () => {
-    if(!localStorage.getItem(LOCAL_STORAGE.KEY)){
-      
-      //ARKNOTE: REMEMBER TO SWAP TEST DATA FOR REAL DATA
-  
-      //const strData = localStorage.getItem(LOCAL_STORAGE.KEY);    
-      const arrData = strTestData.split('/');
-
-      const arrWorkData = [];
-      const arrBreakData = [];
-
-      arrData.forEach(strDataElement=>{
-        if(strDataElement[0]==='W'){arrWorkData.push(strDataElement.slice(1))}
-        else if(strDataElement[0]==='B'){arrBreakData.push(strDataElement.slice(1))}
-      })
-
-      const objData = {
-        work: arrWorkData,
-        break: arrBreakData,
-      }
-
-      return objData;
+      return false;
 
     } else {
       if(funcLocalStorageCreate()){
-        funcLocalStorageRead();
+        funcLocalStorageUpdate_add(intTimeToAdd, strTimerMode);
       }
     }
   }
 
-  useEffect(()=>{
-    console.log(funcLocalStorageRead());
-  },[]);
-
   /**
-   * UPDATE THE LOCALSTORAGE WITH NEW DATA
-   * @param {intTimeToAdd} - interger time to add to localstorage in seconds
-   * @param {strTImeModeToAdd} - which mode of time needs adding
-   * @returns {undefined} - nothing to return
+   * 
+   * @param {number} intPosition - the position of the item to remove
+   * @returns {undefined}
    */
-  // const funcLocalStorageUpdate = (intTimeToAdd, strTimeModeToAdd) => {
+  const funcLocalStorageUpdate_remove = (intPosition) => {
+    if(!localStorage.getItem(LOCAL_STORAGE.KEY)){
+      // ARKNOTE REMOVE ! FROM THIS AT FINAL RELEASE
 
-  // }
+      const arrData = 
+      [...funcLocalStorageRead().all.slice(0, intPosition), ...funcLocalStorageRead().all.slice(intPosition+1)];
+
+      let strData = '';
+
+      arrData.forEach(strDataItem => {
+        strData = `${strData}${strData.length>0 ? LOCAL_STORAGE.SPLIT_CHAR : ''}${strDataItem}`;
+      })
+
+      //localStorage.setItem(LOCAL_STORAGE.KEY, strData);
+
+      return strData;
+    }
+  }
+
+  const funcLocalStorageDeleteAll = () => {
+    if(localStorage.getItem(LOCAL_STORAGE.KEY)){
+      // ARKMOTE REMOVE ! FROM THSI AT FINAL RELEASE
+
+      localStorage.removeItem(LOCAL_STORAGE.KEY);
+      funcLocalStorageDeleteAll();
+    } else{
+      return false;
+    }
+  }
+
+
+  useEffect(()=>{
+    console.log(funcLocalStorageDeleteAll());
+  },[]);
 
 
   useEffect(()=>{
     if(intCurrentTime===0){
       switch(strTimerMode){
-        case TIMER_MODE.WORK:
+        case TIMER_MODE.WORK.NAME:
           setintCurrentTime(intBreakTime);
-          setstrTimerMode(TIMER_MODE.BREAK);
+          setstrTimerMode(TIMER_MODE.BREAK.NAME);
           setstrTimerState(TIMER_STATE.PAUSED);
           break;
-        case TIMER_MODE.BREAK:
+        case TIMER_MODE.BREAK.NAME:
           setintCurrentTime(intWorkTime);
-          setstrTimerMode(TIMER_MODE.WORK);
+          setstrTimerMode(TIMER_MODE.WORK.NAME);
           setstrTimerState(TIMER_STATE.PAUSED);
           break;
         default:
@@ -166,7 +188,7 @@ function App() {
   const funcSetBreakTime = (intSeconds) => {
     setintBreakTime(intSeconds);
     setintCurrentTime(intWorkTime);
-    setstrTimerMode(TIMER_MODE.WORK)
+    setstrTimerMode(TIMER_MODE.WORK.NAME)
     funcNextPage();
   }
 
